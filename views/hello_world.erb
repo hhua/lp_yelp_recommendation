@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Yelp Recommendation</title>
+  <style type="text/css">
+	body{
+		font-family: 'Times', 'Georgia';
+		margin: 0 auto;
+		padding: 10px;
+		width: 384px;
+	}
+
+	#title{
+		text-align: center;
+	}
+
+	#main{
+		text-align: center;
+	}
+  </style>
+  <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+  <script src="http://code.jquery.com/jquery-migrate-1.1.1.min.js"></script>
+  <!-- replace google api key here -->  
+</head>
+<body onload="initialize()">
+<script type="text/javascript"
+	// replace with your own google application API
+	src="https://maps.googleapis.com/maps/api/js?key=&sensor=false"></script>
+
+<script type="text/javascript">
+	// replace Yelp api key here
+	var api_key = "";
+	
+
+	function initialize(){
+		// Check for geolocation support
+		
+		var location = new google.maps.LatLng(40.44, -80);
+
+		var mapOptions = {
+			center : location,
+			zoom : 17,
+			mapTypeId : google.maps.MapTypeId.ROADMAP
+		};
+
+		var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
+
+		if (navigator.geolocation) {
+			// Use method getCurrentPosition to get coordinates
+			navigator.geolocation
+					.getCurrentPosition(function show_map(position) {
+												
+						getRestaurants(position.coords.latitude, position.coords.longitude, map);
+
+						// let's show a map or do something interesting!
+						//map.setCenter(new google.maps.LatLng(cur_latitude, cur_longitude)); 
+
+					});
+		}
+
+	}
+
+	function getRestaurants(latitude, longitude, map){
+		var yelp_url = "http://api.yelp.com/business_review_search?callback=?&radius=1&term=restaurants&lat=" + latitude + "&long=" + longitude + "&limit=10&ywsid=" + api_key;
+
+		var content = document.getElementById("main");
+		
+		$.getJSON(yelp_url, function(json){
+			var obj = json.businesses;
+			var length = json.businesses.length;
+
+			var index = Math.floor(Math.random() * (length - 1));
+			var rest = obj[index];
+
+			content.innerHTML = "<h3>" + rest.name + "</h3><div>Address: " + rest.address1 + ", " + rest.city + "</div><div>Phone: " + rest.phone + "</div><div>Rating: " + rest.avg_rating + "</div>";
+
+			map.setCenter(new google.maps.LatLng(rest.latitude, rest.longitude)); 
+
+			var marker = new google.maps.Marker({
+				position : new google.maps.LatLng(rest.latitude, rest.longitude),
+				map : map
+			});
+		});
+	}
+
+	
+</script>
+<!--<div id="content">
+		<h2><%= @name %></h2>
+		<div>Address: <%= @address %></div>	
+		<div>City: <%= @city %></div>	
+		<div>Phone: <%= @phone %></div>	
+		<div>Rating: <%= @rating %></div>	
+	</div> -->
+	<div id="title">
+		<h2>A restaurant Per day</h2>
+		<hr />
+	</div>
+	<div id="main">
+	</div>
+	<div id="map_canvas" style="margin-top: 20px; width: 384px; height: 384px;">
+	</div>
+</body>
+</html>

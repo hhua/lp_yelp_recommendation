@@ -1,0 +1,54 @@
+{
+    "owner_email" : "hhua.dev@gmail.com",
+    "publication_api_version":"1.0",
+    "name": "Yelp Recommendation",
+    "description": "Example publication for Little Printer",
+    "delivered_on": "every Monday",
+    "send_timezone_info": true,
+    "send_delivery_count": false,
+    "external_configuration": false,
+    "config" : {
+      "fields": [
+          {
+              "type": "text",
+              "name": "name",
+              "label": "Han Hua"
+          },
+          {
+              "type": "select",
+              "name": "lang",
+              "label": "Select your greeting language",
+              "options": [
+                  [
+                      "English",
+                      "english"
+                  ],
+                  [
+                      "French",
+                      "french"
+                  ],
+                  [
+                      "German",
+                      "german"
+                  ],
+                  [
+                      "Spanish",
+                      "spanish"
+                  ],
+                  [
+                      "Portuguese",
+                      "portuguese"
+                  ],
+                  [
+                      "Italian",
+                      "italian"
+                  ],
+                  [
+                      "Swedish",
+                      "swedish"
+                  ]
+              ]
+          }
+      ]
+    }
+}
